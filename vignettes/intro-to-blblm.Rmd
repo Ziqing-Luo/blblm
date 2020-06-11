@@ -1,0 +1,106 @@
+---
+title: "Introduction to blblm"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{intro-to-blblm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(blblm)
+library(furrr)
+```
+
+### Test parallel
+
+The package has been imporved by the power of parallelization. Firstly，you need to set the workers based on your computer.
+
+Here, I can set the worker to 4. `set_worker(n = 4L)`. Notice that the number of 
+workers should be **integer**, like 2L,3L ...
+
+Then let's compare the speed :
+
+```{r,eval=FALSE}
+library(tictoc)
+
+#  set_workers(n = 1L)
+  tic()
+  fit = fit <- blblm(mpg ~ wt * hp, data = mtcars, m = 4, B = 1000)
+  t1 = toc()
+
+  t1_elapsed = t1$toc - t1$tic
+  t1_elapsed
+
+  # parallel
+  set_workers(n = 4L)
+  tic()
+  fit = fit <- blblm(mpg ~ wt * hp, data = mtcars, m = 4, B = 1000)
+  t2 = toc()
+
+  t2_elapsed = t2$toc - t2$tic
+  
+  t2_elapsed
+
+```
+
+### Test read files
+
+```{r, eval=FALSE}
+test_that("Test specify a list of file of datasets that would be then loaded in the workers", {
+
+  dir.create(file.path(tempdir(),"test_data"),mode = "0777")
+  tmp_data_path = normalizePath(file.path(tempdir(),"test_data"))
+
+  data_list = split_data(mtcars,4)
+  purrr::iwalk(1:4,
+               ~vroom::vroom_write(data_list[[.x]],
+                                   path = file.path(tmp_data_path,paste0(.x,".tsv")))
+  )
+
+  file_paths = list.files(tmp_data_path,full.names = TRUE)
+
+  set_workers(n = 4L)
+
+  blblm_files(mpg ~ wt * hp, file_paths = file_paths, B = 100)
+
+  expect_invisible(blblm_files(mpg ~ wt * hp, file_paths = file_paths, B = 100))
+
+
+})
+```
+
+
+### Estimate of bootstrap
+
+```{r}
+  fit <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100)
+
+  coef(fit)
+  confint(fit, c("wt", "hp"))
+  sigma(fit)
+  sigma(fit, confidence = TRUE)
+  predict(fit, data.frame(wt = c(2.5, 3), hp = c(150, 170)))
+  predict(fit, data.frame(wt = c(2.5, 3), hp = c(150, 170)), confidence = TRUE)
+```
+
+
+### Logistic Regression
+
+**blblm** package can also run a glm model, such as logistic regression.
+
+```{r}
+d.AD <- data.frame(treatment = gl(3,3),
+                     outcome   = gl(3,1,9),
+                     counts    = c(18,17,15, 20,10,20, 25,13,12))
+glm_fit <- blbglm(counts ~ outcome + treatment, data = d.AD, family = poisson(),m = 1,B = 10)
+coef(glm_fit)
+```
+

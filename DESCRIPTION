@@ -1,18 +1,29 @@
-Package: blblm
 Type: Package
-Title: What the Package Does (Title Case)
+Package: blblm
+Title: Linear Regression with Little Bag of Bootstraps
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
-Encoding: UTF-8
-LazyData: true
-Suggests: 
-    testthat (>= 2.1.0)
+Authors@R: 
+    person(given = "Ziqing",
+           family = "Luo", email = "zqluo@ucdavis.edu",
+           role = c("aut", "cre"))
+Maintainer: Ziqing Luo <zqluo@ucdavis.edu>
+Description: Linear Regression with Little Bag of Bootstraps,
+    which is implemented in parallel.
+License: MIT + file LICENSE
 Imports: 
     purrr,
-    magrittr
+    magrittr,
+    tibble,
+    furrr,
+    vroom
+Suggests: 
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
+VignetteBuilder: knitr
+Enhances: 
+    tiktoc
