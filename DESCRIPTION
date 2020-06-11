@@ -8,7 +8,9 @@ Authors@R:
            role = c("aut", "cre"))
 Maintainer: Ziqing Luo <zqluo@ucdavis.edu>
 Description: Linear Regression with Little Bag of Bootstraps,
-    which is implemented in parallel.
+    which is implemented in parallel, allow users to specify a 
+    list of file of datasets, and logisitic regression with 
+    Little Bag of Bootstraps.
 License: MIT + file LICENSE
 Imports: 
     purrr,

@@ -26,8 +26,6 @@ The package has been imporved by the power of parallelization. Firstly，you nee
 Here, I can set the worker to 4. `set_worker(n = 4L)`. Notice that the number of 
 workers should be **integer**, like 2L,3L ...
 
-Then let's compare the speed :
-
 ```{r,eval=FALSE}
 library(tictoc)
 
