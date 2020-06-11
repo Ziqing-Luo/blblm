@@ -7,7 +7,9 @@
 \title{blblm: Linear Regression with Little Bag of Bootstraps}
 \description{
 Linear Regression with Little Bag of Bootstraps,
-    which is implemented in parallel.
+    which is implemented in parallel, allow users to specify a 
+    list of file of datasets, and logisitic regression with 
+    Little Bag of Bootstraps.
 }
 \details{
 Linear Regression with Little Bag of Bootstraps
